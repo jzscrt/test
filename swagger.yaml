@@ -1,0 +1,179 @@
+tags:
+- name: animals
+  description: animals api endpoint
+
+paths:
+# [GET]
+  /v1/animals:
+    get:
+      tags:
+      - animals
+      summary: Find All Animals
+      responses:
+        200:
+          description: 'OK'
+          content: 'application/json'
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items: 
+                  $ref: '#/definitions/animals_out'
+              message:
+                type: string
+                example: 'allAnimals'
+        500:
+          description: 'Server Error'
+    post:
+      tags:
+      - animals
+      summary: Add Animal
+      parameters:
+      - in: body
+        name: body
+        description: 'Animal array that needs to be added'
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/animals_in'
+          
+            
+      responses:
+        200:
+          description: 'OK'
+          content: 'application/json'
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items: 
+                  $ref: '#/definitions/animals_out'
+              message:
+                type: string
+                example: 'createdAnimal'
+        500:
+          description: 'Server Error'
+  
+  /v1/animals/{id}:
+    patch:
+      tags:
+      - animals
+      summary: Update Animal
+      parameters:
+      - in: query
+        name: query
+        description: 'Animal id'
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/animals_in'
+      - in: body
+        name: body
+        description: 'Animal array that needs to be added'
+        required: false
+        schema:
+          type: object
+          $ref: '#/definitions/animals_in'
+      responses:
+        200:
+          description: 'OK'
+          content: 'application/json'
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                $ref: '#/definitions/animals_out'
+              message:
+                type: string
+                example: 'updatedAnimal'
+        500:
+          description: 'Server Error'
+    delete:
+      tags:
+      - animals
+      summary: Delete Animal
+      parameters:
+      - in: query
+        name: query
+        description: 'Animal id'
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/animals_in'
+      responses:
+        200:
+          description: 'OK'
+          content: 'application/json'
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                $ref: '#/definitions/animals_out'
+              message:
+                type: string
+                example: 'deletedAnimal'
+        500:
+          description: 'Server Error'
+    
+  /v1/animals/random:
+    get:
+      tags:
+      - animals
+      summary: Get Random Animal
+      responses:
+        200:
+          description: 'OK'
+          content: 'application/json'
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                $ref: '#/definitions/animals_out'
+              message:
+                type: string
+                example: 'randomAnimal'
+        500:
+          description: 'Server Error'
+    
+
+# definitions
+definitions:
+  animals_out:
+    type: object
+    properties:
+      id:
+        type: number
+        description: animal id
+        example: 1
+      animal:
+        type: string
+        description: animal name
+        example: Bear
+      color:
+        type: string
+        description: animal color
+        example: White
+  animals_in:
+    type: object
+    required:
+        - animal
+        - color
+    properties:
+      animal:
+        type: string
+        description: animal name
+        example: Bear
+      color:
+        type: string
+        description: animal color
+        example: White
+schemes:
+ - http
