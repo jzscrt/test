@@ -1,8 +1,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "target": "es2017",
-    "lib": ["es2017", "esnext.asynciterable"],
+    "target": "ES2020",
+    "lib": ["ES2020", "esnext.asynciterable"],
     "typeRoots": ["node_modules/@types"],
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
@@ -19,8 +19,31 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "importHelpers": true,
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"],
+      "@config/*": ["_config/*"],
+      "@controllers": ["controllers"],
+      "@controllers/*": ["controllers/*"],
+      "@databases": ["databases"],
+      "@databases/*": ["databases/*"],
+      "@dtos": ["dtos"],
+      "@dtos/*": ["dtos/*"],
+      "@enums": ["enums/"],
+      "@interfaces": ["interfaces"],
+      "@interfaces/*": ["interfaces/*"],
+      "@middlewares": ["middlewares"],
+      "@middlewares/*": ["middlewares/*"],
+      "@models": ["models"],
+      "@models/*": ["models/*"],
+      "@routes": ["routes/v1"],
+      "@routes/*": ["routes/v1/*"],
+      "@services": ["services"],
+      "@services/*": ["services/*"],
+      "@utils": ["_utils"],
+      "@utils/*": ["_utils/*"]
+    }
   },
-  "include": ["src/**/*.ts", "src/**/*.json", ".env"],
-  "exclude": ["node_modules", "src/tests"]
+  "include": ["src/**/*.ts", "src/**/*.json", ".env.*"],
+  "exclude": ["node_modules", "src/http", "src/logs", "src/tests"]
 }

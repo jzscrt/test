@@ -1,5 +1,5 @@
 import App from './app';
-import AnimalRoute from './routes/animals.route';
+import UserRoute from './routes/users.route';
 
-const app = new App([new AnimalRoute()]);
+const app = new App([new UserRoute()]);
 app.listen();
