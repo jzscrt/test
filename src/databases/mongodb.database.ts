@@ -1,7 +1,7 @@
 import { db } from '@config/config';
 
-const scheme: String = 'mongodb+srv://';
-const domain: String = db.host;
+const scheme: String = 'mongodb://';
+const domain: String = `${db.host}:${db.port}`;
 const query: Object = {
   retryWrites: true,
   w: 'majority',
