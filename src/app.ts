@@ -1,5 +1,5 @@
 import cors from 'cors';
-import { mongodb } from '@databases/mongodb.database';
+import db from '@databases';
 import express from 'express';
 import helmet from 'helmet';
 import { connect, set } from 'mongoose';
@@ -27,7 +27,7 @@ class App {
     this.app.listen(this.port, () => {
       logger.info(`===================================`);
       logger.info(`ENV: ${this.env}`);
-      logger.info(`BSF Backend listening to port: ${this.port}`);
+      logger.info(`CS Backend listening to port: ${this.port}`);
       logger.info(`===================================`);
     });
   }
@@ -36,10 +36,10 @@ class App {
     if (this.env !== 'production') {
       set('debug', true);
     }
-    const dbConnection = mongodb[dbConfig.provider];
+    const dbConnection = db[dbConfig.provider];
     connect(dbConnection.url, err => {
       if (err) {
-        logger.info('Error connecting to DB!');
+        logger.error('Error connecting to DB!');
         logger.error('Error:', err);
       } else {
         logger.info('Connected to DB!');

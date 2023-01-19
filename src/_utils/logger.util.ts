@@ -4,19 +4,24 @@ import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { log } from '@config/config';
 
-// logs dir
+/**
+ * Create a directory for the logs if it doesn't already exist
+ * @constant {string} logDir - the path to the logs directory
+ */
 const logDir: string = join(__dirname, log.dir);
-
 if (!existsSync(logDir)) {
   mkdirSync(logDir);
 }
 
-// Define log format
+/**
+ * Define log format
+ * @constant {Object} logFormat - the format for the log messages
+ */
 const logFormat = format.printf(({ timestamp, level, message }) => `${timestamp} ${level}: ${message}`);
 
-/*
- * Log Level
- * error: 0, warn: 1, info: 2, http: 3, verbose: 4, debug: 5, silly: 6
+/**
+ * Create a logger with specified format and transport options
+ * @constant {Object} logger - the logger object
  */
 const logger = createLogger({
   format: format.combine(
@@ -53,6 +58,9 @@ const logger = createLogger({
   ],
 });
 
+/**
+ * Add a transport for console logs
+ */
 logger.add(
   new transports.Console({
     format: format.combine(
@@ -64,4 +72,7 @@ logger.add(
   }),
 );
 
+/**
+ * Export the logger for use in other parts of the application
+ */
 export { logger };

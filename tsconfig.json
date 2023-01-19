@@ -21,29 +21,21 @@
     "importHelpers": true,
     "baseUrl": "src",
     "paths": {
-      "@/*": ["*"],
       "@config/*": ["_config/*"],
-      "@controllers": ["controllers"],
       "@controllers/*": ["controllers/*"],
       "@databases": ["databases"],
       "@databases/*": ["databases/*"],
-      "@dtos": ["dtos"],
       "@dtos/*": ["dtos/*"],
-      "@enums": ["enums/"],
-      "@interfaces": ["interfaces"],
+      "@enums": ["enums"],
+      "@enums/*": ["enums/*"],
       "@interfaces/*": ["interfaces/*"],
-      "@middlewares": ["middlewares"],
       "@middlewares/*": ["middlewares/*"],
-      "@models": ["models"],
       "@models/*": ["models/*"],
-      "@routes": ["routes/v1"],
-      "@routes/*": ["routes/v1/*"],
-      "@services": ["services"],
+      "@routes/*": ["routes/*"],
       "@services/*": ["services/*"],
-      "@utils": ["_utils"],
       "@utils/*": ["_utils/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.json", ".env.*"],
+  "include": ["src/**/*", "src/**/*", ".env.*"],
   "exclude": ["node_modules", "src/http", "src/logs", "src/tests"]
 }

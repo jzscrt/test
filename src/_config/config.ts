@@ -6,6 +6,7 @@ dotenvConfig({
 
 const envSchema = Joi.object()
   .keys({
+    HOST: Joi.string().valid('local', 'dev', 'stg', 'prod').required().default('local'),
     NODE_ENV: Joi.string().valid('production', 'development', 'staging').required(),
     PORT: Joi.number().default(3000),
 
@@ -24,6 +25,9 @@ const envSchema = Joi.object()
     ROUTES_VER: Joi.string().default('v1').description('Express routes version'),
 
     LOG_DIR: Joi.string().default('../../logs').description('log folder location'),
+
+    CDK_DEFAULT_REGION: Joi.string().default('us-east-1').description('AWS Account Region'),
+    CDK_DEFAULT_ACCOUNT: Joi.string().default('default').description('AWS Account Profile'),
   })
   .unknown();
 
@@ -58,6 +62,10 @@ const config = {
   log: {
     dir: envVars.LOG_DIR,
   },
+  cdk: {
+    region: envVars.CDK_DEFAULT_REGION,
+    account: envVars.CDK_DEFAULT_ACCOUNT,
+  },
 };
 
-export const { control, cors, db, env, log, port, security } = config;
+export const { cdk, control, cors, db, env, log, port, security } = config;

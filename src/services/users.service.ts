@@ -1,5 +1,5 @@
 import userModel from '@models/users.model';
-import { ApiError } from '@/_utils/apierror.util';
+import { ApiError } from '@utils/apierror.util';
 import { BAD_REQUEST, CONFLICT } from 'http-status';
 import { CreateUserDto } from '@dtos/users.dto';
 import { isEmpty } from 'class-validator';
