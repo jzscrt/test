@@ -5,6 +5,15 @@ import { Error } from 'mongoose';
 import { logger } from '@utils/logger.util';
 import { NextFunction, Request, Response } from 'express';
 
+/**
+ * errorConverter - function that converts the error received in the middleware
+ * to an ApiError with appropriate statusCode and message
+ *
+ * @param {any} error - error object received
+ * @param {Request} req - express request object
+ * @param {Response} res - express response object
+ * @param {NextFunction} next - express next function
+ */
 const errorConverter = (error: any, req: Request, res: Response, next: NextFunction) => {
   const err = error;
   if (!(err instanceof ApiError)) {
@@ -15,6 +24,15 @@ const errorConverter = (error: any, req: Request, res: Response, next: NextFunct
   next(error);
 };
 
+/**
+ * errorHandler - function that handles the error received in the middleware
+ * and sends a json response to the client with appropriate statusCode and message
+ *
+ * @param {any} error - error object received
+ * @param {Request} req - express request object
+ * @param {Response} res - express response object
+ * @param {NextFunction} next - express next function
+ */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const errorHandler = (error: any, req: Request, res: Response, next: NextFunction) => {
   let { statusCode, message } = error;

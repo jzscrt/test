@@ -4,6 +4,7 @@ import express from 'express';
 import helmet from 'helmet';
 import { connect, set } from 'mongoose';
 import { control, db as dbConfig, env, port } from '@config/config';
+import { errorConverter, errorHandler } from '@middlewares/error.middleware';
 import { join } from 'path';
 import { logger } from '@utils/logger.util';
 import { Route } from '@interfaces/routes.interface';
@@ -21,6 +22,7 @@ class App {
     this.initializeMiddlewares();
     this.connectToDatabase();
     this.initializeRoutes(routes);
+    this.initializeErrorHandling();
   }
 
   public listen() {
@@ -59,6 +61,11 @@ class App {
     routes.forEach(route => {
       this.app.use(`/${control.routesVer}`, route.router);
     });
+  }
+
+  private initializeErrorHandling() {
+    this.app.use(errorConverter);
+    this.app.use(errorHandler);
   }
 }
 

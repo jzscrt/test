@@ -81,6 +81,15 @@ class UserService {
 
     return deleteUserById;
   }
+
+  public async findUserByEmail(email: string): Promise<User> {
+    if (isEmpty(email)) throw new ApiError(BAD_REQUEST, 'USER: invalid email');
+
+    const findUser: User = await this.users.findOne({ email });
+    if (!findUser) throw new ApiError(BAD_REQUEST, 'USER: does not exists');
+
+    return findUser;
+  }
 }
 
 export default UserService;
