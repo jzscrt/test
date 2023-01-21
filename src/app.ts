@@ -2,10 +2,12 @@ import cors from 'cors';
 import db from '@databases';
 import express from 'express';
 import helmet from 'helmet';
+import passport from 'passport';
 import { connect, set } from 'mongoose';
 import { control, db as dbConfig, env, port } from '@config/config';
 import { errorConverter, errorHandler } from '@middlewares/error.middleware';
 import { join } from 'path';
+import { jwtStrategy } from '@config/passport';
 import { logger } from '@utils/logger.util';
 import { Route } from '@interfaces/routes.interface';
 
@@ -55,6 +57,8 @@ class App {
     this.app.use(express.static(join(__dirname, '../public')));
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
+    passport.use('jwt', jwtStrategy);
+    this.app.use(passport.initialize());
   }
 
   private initializeRoutes(routes: Route[]) {

@@ -10,8 +10,8 @@
 
 const allRoles = {
   su: ['user-orwx', 'auth$logout'],
-  admin: ['user-rw', 'auth$logout'],
-  user: ['user-or', 'auth$logout$login'],
+  admin: ['user-orw', 'auth$logout'],
+  user: ['user-o', 'auth$logout'],
 };
 
 /**

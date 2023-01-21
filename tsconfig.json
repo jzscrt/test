@@ -41,5 +41,9 @@
     }
   },
   "include": ["src/**/*", "src/**/*", ".env.*"],
-  "exclude": ["node_modules", "src/http", "src/logs", "src/tests"]
+  "exclude": ["node_modules", "src/http", "src/logs", "src/tests"],
+  "typeRoots": [
+    "./_typings",
+    "./node_modules/@types/"
+  ]
 }

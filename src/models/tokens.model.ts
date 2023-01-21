@@ -1,3 +1,4 @@
+import toJSON from '@meanie/mongoose-to-json';
 import { Document, model, Schema, SchemaTypes } from 'mongoose';
 import { Token } from '@interfaces/tokens.interface';
 import { TokenType } from '@enums';
@@ -32,6 +33,8 @@ const tokenSchema: Schema = new Schema(
     timestamps: true,
   },
 );
+tokenSchema.plugin(toJSON);
+
 const tokenModel = model<Token & Document>('Token', tokenSchema);
 
 export default tokenModel;

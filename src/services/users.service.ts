@@ -1,15 +1,12 @@
 import userModel from '@models/users.model';
 import { ApiError } from '@utils/apierror.util';
-import { BAD_REQUEST, CONFLICT } from 'http-status';
+import { BAD_REQUEST, NOT_FOUND } from 'http-status';
 import { CreateUserDto } from '@dtos/users.dto';
-import { isEmpty } from 'class-validator';
+import { hash } from 'bcrypt';
+import { isEmpty, isNotEmptyObject } from 'class-validator';
+import { security } from '@config/config';
 import { User } from '@interfaces/users.interface';
 
-/**
- * UserService is a class that provides functionality for CRUD operations on User objects.
- *
- * @class UserService
- */
 class UserService {
   public users = userModel;
 
@@ -19,8 +16,8 @@ class UserService {
    * @returns {Promise<User[]>} - A promise that resolves to an array of User objects.
    */
   public async findAllUsers(): Promise<User[]> {
-    const users: User[] = await this.users.find();
-    return users;
+    const users = await this.users.find();
+    return users.map(user => user.toJSON()) as User[];
   }
 
   /**
@@ -31,9 +28,11 @@ class UserService {
    */
   public async findUserById(userId: string): Promise<User> {
     if (isEmpty(userId)) throw new ApiError(BAD_REQUEST, 'User: invalid userId');
+    console.log('userId', userId);
+    const findUser = await this.users.findById(userId);
+    if (!findUser) throw new ApiError(NOT_FOUND, 'User: user not found');
 
-    const user: User[] = await this.users.find({ _id: userId });
-    return user[0];
+    return findUser.toJSON() as User;
   }
 
   /**
@@ -43,10 +42,18 @@ class UserService {
    * @returns {Promise<User>} - A promise that resolves to the new User object.
    */
   public async createUser(userData: CreateUserDto): Promise<User> {
-    if (isEmpty(userData)) throw new ApiError(BAD_REQUEST, 'User: invalid userData');
+    if (!isNotEmptyObject(userData)) throw new ApiError(BAD_REQUEST, 'USER: invalid userData');
 
-    const user: User = await this.users.create(userData);
-    return user;
+    const findUser = await this.users.findOne({ email: userData.email });
+    if (findUser) throw new ApiError(BAD_REQUEST, `USER: email ${userData.email} already exists`);
+
+    const hashedPassword = await hash(userData.password, security.salt);
+    const createUser = await this.users.create({
+      ...userData,
+      password: hashedPassword,
+    });
+
+    return await this.findUserById(createUser.id);
   }
 
   /**
@@ -61,10 +68,10 @@ class UserService {
     if (isEmpty(userData)) throw new ApiError(BAD_REQUEST, 'User: invalid userData');
 
     const updateUserById: User = await this.users.findByIdAndUpdate(userId, userData);
-    if (!updateUserById) throw new ApiError(CONFLICT, 'User: user not found');
+    if (!updateUserById) throw new ApiError(NOT_FOUND, 'User: user not found');
 
-    const updatedUser: User = await this.findUserById(userId);
-    return updatedUser;
+    const updatedUser = await this.findUserById(userId);
+    return updatedUser[0].toJSON() as User;
   }
 
   /**
@@ -76,19 +83,24 @@ class UserService {
   public async deleteUser(userId: string): Promise<User> {
     if (isEmpty(userId)) throw new ApiError(BAD_REQUEST, 'User: invalid userId');
 
-    const deleteUserById: User = await this.users.findByIdAndDelete(userId);
-    if (!deleteUserById) throw new ApiError(CONFLICT, 'User: user not found');
+    const deleteUserById = await this.users.findByIdAndDelete(userId);
+    if (!deleteUserById) throw new ApiError(NOT_FOUND, 'User: user not found');
 
-    return deleteUserById;
+    return deleteUserById.toJSON() as User;
   }
 
+  /**
+   * Finds a user by email
+   * @param email - The email of the user
+   * @returns A promise that resolves to the user object if found, else it throws an error
+   */
   public async findUserByEmail(email: string): Promise<User> {
     if (isEmpty(email)) throw new ApiError(BAD_REQUEST, 'USER: invalid email');
 
-    const findUser: User = await this.users.findOne({ email });
+    const findUser = await this.users.findOne({ email });
     if (!findUser) throw new ApiError(BAD_REQUEST, 'USER: does not exists');
 
-    return findUser;
+    return findUser.toJSON() as User;
   }
 }
 

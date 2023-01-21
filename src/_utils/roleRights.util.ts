@@ -26,22 +26,25 @@ export const mapRoles = (arr: string[]): any[] => {
   return arr.map((val: string) => {
     const [module, permissions] = val.split(/[-$]/);
     return {
-      [module]: val.includes('$') ? permissions : [...permissions].map((p: string) => p),
+      [module]: val.includes('$') ? (typeof permissions === 'string' ? [permissions] : permissions) : [...permissions].map((p: string) => p),
     };
   });
 };
 
+/**
+ * checkRights - checks if a user has the required rights to perform an action
+ *
+ * @param {any[]} userRights - an array of rights that the user has
+ * @param {any[]} allowedRights - an array of rights required to perform an action
+ * @returns {boolean} - true if the user has the required rights, false otherwise
+ */
 export const checkRights = (userRights: any[], allowedRights: any[]): boolean => {
-  return userRights.every(userRight => {
-    return Object.keys(userRight).every(key => {
-      return allowedRights.some(allowedRight => {
-        return (
-          key in allowedRight &&
-          (Array.isArray(userRight[key])
-            ? userRight[key].every((userValue: any) => allowedRight[key].includes(userValue))
-            : userRight[key] === allowedRight[key])
-        );
-      });
-    });
-  });
+  let res = false;
+  for (const allowedRightKey in allowedRights) {
+    res = false;
+    if (userRights.hasOwnProperty(allowedRightKey)) {
+      res = Object.values(userRights[allowedRightKey]).every((userRight: string) => allowedRights[allowedRightKey].includes(userRight));
+    }
+  }
+  return res;
 };

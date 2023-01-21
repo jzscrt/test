@@ -1,6 +1,6 @@
 import { ApiError } from '@utils';
 import { AuthService, TokenService, UserService } from '@services';
-import { catchAsync, omitClassKeys } from '@utils';
+import { catchAsync } from '@utils';
 import { CREATED, FORBIDDEN, OK, UNAUTHORIZED } from 'http-status';
 import { CreateUserDto, LoginAuthDto, LogoutAuthDto } from '@dtos';
 import { isEmpty } from 'class-validator';
@@ -18,21 +18,19 @@ class AuthController {
     const userData: CreateUserDto = req.body;
 
     const createUserData: User = await this.userService.createUser(userData);
-    const user = omitClassKeys(createUserData['_doc'], 'password');
 
-    const tokens = this.tokenService.generateAuthTokens(createUserData);
+    const tokens = await this.tokenService.generateAuthTokens(createUserData);
 
-    res.status(CREATED).json({ data: { user, tokens }, message: 'created' });
+    res.status(CREATED).json({ data: { user: createUserData, tokens }, message: 'created' });
   });
 
   public login = catchAsync(async (req: Request, res: Response, _next: NextFunction) => {
     const loginData: LoginAuthDto = req.body;
     const findUser: User = await this.authService.login(loginData);
-    const user = omitClassKeys(findUser['_doc'], 'password');
 
     const tokens = await this.tokenService.generateAuthTokens(findUser);
 
-    res.status(OK).json({ data: { user, tokens }, message: 'logged in' });
+    res.status(OK).json({ data: { user: findUser, tokens }, message: 'logged in' });
   });
 
   public logout = catchAsync(async (req: Request, res: Response, _next: NextFunction) => {

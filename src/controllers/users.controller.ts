@@ -1,18 +1,19 @@
-import { NextFunction, Request, Response } from 'express';
-import { CreateUserDto } from '@dtos/users.dto';
-import { User } from '@interfaces/users.interface';
 import userService from '@services/users.service';
-import { OK, CREATED } from 'http-status';
 import { catchAsync } from '@utils/catchAsync.util';
+import { CREATED, OK } from 'http-status';
+import { CreateUserDto } from '@dtos/users.dto';
+import { NextFunction, Request, Response } from 'express';
+import { User } from '@interfaces/users.interface';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 class UserController {
   public userService = new userService();
 
-  public getUsers = catchAsync(async (_req: Request, res: Response, _next: NextFunction): Promise<void> => {
-    const findAllUsers: User[] = await this.userService.findAllUsers();
+  public getUsers = catchAsync(async (req: Request, res: Response, _next: NextFunction): Promise<void> => {
+    const { userId } = req.params;
+    const findAllUsers: User[] | User = userId ? await this.userService.findUserById(userId) : await this.userService.findAllUsers();
 
-    res.status(OK).json({ data: findAllUsers, message: 'allUsers' });
+    res.status(OK).json({ data: findAllUsers, message: userId ? 'getUser' : 'getAllUsers' });
   });
 
   public createUser = catchAsync(async (req: Request, res: Response, _next: NextFunction): Promise<void> => {

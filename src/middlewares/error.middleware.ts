@@ -14,10 +14,10 @@ import { NextFunction, Request, Response } from 'express';
  * @param {Response} res - express response object
  * @param {NextFunction} next - express next function
  */
-const errorConverter = (error: any, req: Request, res: Response, next: NextFunction) => {
-  const err = error;
-  if (!(err instanceof ApiError)) {
-    const statusCode = err.statusCode || err instanceof Error ? httpStatus.BAD_REQUEST : httpStatus.INTERNAL_SERVER_ERROR;
+const errorConverter = (error: any, _req: Request, _res: Response, next: NextFunction) => {
+  if (!(error instanceof ApiError)) {
+    const { err } = error;
+    const statusCode = err.statusCode || error instanceof Error ? httpStatus.BAD_REQUEST : httpStatus.INTERNAL_SERVER_ERROR;
     const message = err.message || httpStatus[statusCode];
     error = new ApiError(statusCode, message, false, error.stack);
   }
@@ -34,7 +34,7 @@ const errorConverter = (error: any, req: Request, res: Response, next: NextFunct
  * @param {NextFunction} next - express next function
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const errorHandler = (error: any, req: Request, res: Response, next: NextFunction) => {
+const errorHandler = (error: any, req: Request, res: Response, _next: NextFunction) => {
   let { statusCode, message } = error;
   if (env === 'production' && !error.isOperational) {
     statusCode = httpStatus.INTERNAL_SERVER_ERROR;
