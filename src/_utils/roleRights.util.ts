@@ -43,7 +43,7 @@ export const checkRights = (userRights: any[], allowedRights: any[]): boolean =>
   for (const allowedRightKey in allowedRights) {
     res = false;
     if (userRights.hasOwnProperty(allowedRightKey)) {
-      res = Object.values(userRights[allowedRightKey]).every((userRight: string) => allowedRights[allowedRightKey].includes(userRight));
+      res = Object.values(allowedRights[allowedRightKey]).every((allowedRight: string) => userRights[allowedRightKey].includes(allowedRight));
     }
   }
   return res;
