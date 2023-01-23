@@ -28,6 +28,12 @@ const envSchema = Joi.object()
 
     CDK_DEFAULT_REGION: Joi.string().default('us-east-1').description('AWS Account Region'),
     CDK_DEFAULT_ACCOUNT: Joi.string().default('default').description('AWS Account Profile'),
+
+    JWT_SECRET: Joi.string().required().description('JWT secret key'),
+    // 10080 minutes - 7 days - 1 week
+    JWT_ACCESS_EXP_MINS: Joi.number().default(10080).description('minutes after which access tokens expire'),
+    JWT_REFRESH_EXP_DAYS: Joi.number().default(30).description('days after which refresh tokens expire'),
+    JWT_RESET_PW_EXP_MINS: Joi.number().default(10).description('minutes after which reset password token expires'),
   })
   .unknown();
 
@@ -66,6 +72,12 @@ const config = {
     region: envVars.CDK_DEFAULT_REGION,
     account: envVars.CDK_DEFAULT_ACCOUNT,
   },
+  jwt: {
+    accessExp: envVars.JWT_ACCESS_EXP_MINS,
+    refreshExp: envVars.JWT_REFRESH_EXP_DAYS,
+    resetPWExp: envVars.JWT_RESET_PW_EXP_MINS,
+    secret: envVars.JWT_SECRET,
+  },
 };
 
-export const { cdk, control, cors, db, env, log, port, security } = config;
+export const { cdk, control, cors, db, env, jwt, log, port, security } = config;

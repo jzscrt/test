@@ -25,17 +25,25 @@
       "@controllers/*": ["controllers/*"],
       "@databases": ["databases"],
       "@databases/*": ["databases/*"],
+      "@dtos": ["dtos"],
       "@dtos/*": ["dtos/*"],
       "@enums": ["enums"],
       "@enums/*": ["enums/*"],
+      "@interfaces": ["interfaces"],
       "@interfaces/*": ["interfaces/*"],
       "@middlewares/*": ["middlewares/*"],
       "@models/*": ["models/*"],
       "@routes/*": ["routes/*"],
+      "@services": ["services"],
       "@services/*": ["services/*"],
+      "@utils": ["_utils"],
       "@utils/*": ["_utils/*"]
     }
   },
   "include": ["src/**/*", "src/**/*", ".env.*"],
-  "exclude": ["node_modules", "src/http", "src/logs", "src/tests"]
+  "exclude": ["node_modules", "src/http", "src/logs", "src/tests"],
+  "typeRoots": [
+    "./_typings",
+    "./node_modules/@types/"
+  ]
 }

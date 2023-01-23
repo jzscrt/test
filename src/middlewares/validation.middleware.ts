@@ -6,6 +6,18 @@ import { validate, ValidationError } from 'class-validator';
 
 const reqBody = ['body', 'query', 'files', 'params'] as const;
 
+/**
+ * validationMiddleware - express middleware that validates the payload of the request
+ * using class-validator library
+ *
+ * @param {type} type - the class representing the payload
+ * @param {value} value - the location of the payload in the request object (body, query, files, or params)
+ * @param {skipMissingProperties} skipMissingProperties - whether to skip validation for missing properties
+ * @param {whitelist} whitelist - whether to only validate the properties present in the payload
+ * @param {forbidNonWhitelisted} forbidNonWhitelisted - whether to forbid properties not present in the payload
+ *
+ * @returns {RequestHandler} - express middleware function
+ */
 const validationMiddleware = (
   type: any,
   value: (typeof reqBody)[number],

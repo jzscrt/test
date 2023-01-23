@@ -1,4 +1,4 @@
-import { ArrayMinSize, IsArray, IsEmail, IsString } from 'class-validator';
+import { ArrayMinSize, IsArray, IsEmail, IsOptional, IsString } from 'class-validator';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 export class CreateUserDto {
@@ -12,10 +12,12 @@ export class CreateUserDto {
   public password: string;
 
   @IsString()
+  @IsOptional()
   public status: string;
 
   @IsArray()
   @ArrayMinSize(1)
+  @IsOptional()
   public role: string[];
 }
 
