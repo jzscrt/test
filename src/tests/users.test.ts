@@ -24,7 +24,7 @@ describe('Testing Users...', () => {
   describe('[POST] /v1/users - Create a user', () => {
     it('response statusCode 201 / createdUser Success', async () => {
       const users = userModel;
-      const lastInsertedUser: User[] = await users.find().sort({ _id: -1 });
+      const lastInsertedUser = await users.find().sort({ _id: -1 });
       const userRoute = new UserRoute();
       const app = new App([userRoute]);
       const payloadBody: CreateUserDto = {
@@ -52,9 +52,12 @@ describe('Testing Users...', () => {
         role: ['user'],
       };
 
-      return request(app).post(`/v1/${userRoute.path}`).send(payloadBody).expect(400, {
-        message: 'User: Email address already exist!',
-      });
+      return request(app)
+        .post(`/v1/${userRoute.path}`)
+        .send(payloadBody)
+        .expect(400, {
+          message: `USER: email ${payloadBody.email} already exists`,
+        });
     });
 
     it('response statusCode 400 / createdUser Fail - Empty request', async () => {

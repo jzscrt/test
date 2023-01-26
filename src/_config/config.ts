@@ -1,8 +1,12 @@
 import Joi from 'joi';
 import { config as dotenvConfig } from 'dotenv';
+import { join } from 'path';
+
 dotenvConfig({
-  path: `.env.${process.env.NODE_ENV || 'development'}.${process.env.HOST || 'local'}`,
+  path: join(__dirname, `../../.env.${process.env.NODE_ENV || 'development'}.${process.env.HOST || 'local'}`),
 });
+
+console.log(join(__dirname, `../../.env.${process.env.NODE_ENV || 'development'}.${process.env.HOST || 'local'}`));
 
 const envSchema = Joi.object()
   .keys({
@@ -40,8 +44,12 @@ const envSchema = Joi.object()
 const { value: envVars, error } = envSchema.prefs({ errors: { label: 'key' } }).validate(process.env);
 
 if (error) {
+  console.log('123');
+  console.log(process.env);
+  console.log(typeof process.env);
   // no loggger since logger needs config to be initialized
-  throw new Error(`Config validation error: ${error.message}`);
+  const err = new Error(`Config validation error: ${error.message}`);
+  console.log(err);
 }
 
 const config = {

@@ -35,7 +35,8 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.8.4",
     "passport": "^0.6.0",
-    "passport-jwt": "^4.0.1"
+    "passport-jwt": "^4.0.1",
+    "tsconfig-paths-jest": "^0.0.1"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.57",
