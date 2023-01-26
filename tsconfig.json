@@ -40,7 +40,7 @@
       "@utils/*": ["src/_utils/*"]
     }
   },
-  "include": ["src/**/*", "src/**/*", ".env.*"],
+  "include": ["src/*", "src/*/*", ".env.*"],
   "exclude": ["node_modules", "src/http", "src/logs", "src/tests"],
   "typeRoots": [
     "./_typings",

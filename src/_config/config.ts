@@ -6,8 +6,6 @@ dotenvConfig({
   path: join(__dirname, `../../.env.${process.env.NODE_ENV || 'development'}.${process.env.HOST || 'local'}`),
 });
 
-console.log(join(__dirname, `../../.env.${process.env.NODE_ENV || 'development'}.${process.env.HOST || 'local'}`));
-
 const envSchema = Joi.object()
   .keys({
     HOST: Joi.string().valid('local', 'dev', 'stg', 'prod').required().default('local'),
@@ -28,7 +26,7 @@ const envSchema = Joi.object()
 
     ROUTES_VER: Joi.string().default('v1').description('Express routes version'),
 
-    LOG_DIR: Joi.string().default('../../logs').description('log folder location'),
+    LOG_DIR: Joi.string().default(join(__dirname, '../../logs')).description('log folder location'),
 
     CDK_DEFAULT_REGION: Joi.string().default('us-east-1').description('AWS Account Region'),
     CDK_DEFAULT_ACCOUNT: Joi.string().default('default').description('AWS Account Profile'),
@@ -44,9 +42,6 @@ const envSchema = Joi.object()
 const { value: envVars, error } = envSchema.prefs({ errors: { label: 'key' } }).validate(process.env);
 
 if (error) {
-  console.log('123');
-  console.log(process.env);
-  console.log(typeof process.env);
   // no loggger since logger needs config to be initialized
   const err = new Error(`Config validation error: ${error.message}`);
   console.log(err);
@@ -74,7 +69,7 @@ const config = {
     salt: envVars.SALT,
   },
   log: {
-    dir: envVars.LOG_DIR,
+    dir: join(__dirname, envVars.LOG_DIR),
   },
   cdk: {
     region: envVars.CDK_DEFAULT_REGION,
@@ -88,4 +83,4 @@ const config = {
   },
 };
 
-export const { cdk, control, cors, db, env, jwt, log, port, security } = config;
+export const { cdk, control, cors, db, env, log, jwt, port, security } = config;

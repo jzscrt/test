@@ -11,7 +11,6 @@ import { User } from '@interfaces/users.interface';
 const tokenSerivce = new TokenService();
 
 const verify = (permissions: string[], req: Request, res: Response, resolve: any, reject: any) => async (err: any, user: User, info: any) => {
-  console.log(err, user, info);
   try {
     if (err || !user || info) {
       return reject(new ApiError(UNAUTHORIZED, `AUTH: authentication failed; ${err || info}`));

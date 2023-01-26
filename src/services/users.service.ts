@@ -28,7 +28,6 @@ class UserService {
    */
   public async findUserById(userId: string): Promise<User> {
     if (isEmpty(userId)) throw new ApiError(BAD_REQUEST, 'User: invalid userId');
-    console.log('userId', userId);
     const findUser = await this.users.findById(userId);
     if (!findUser) throw new ApiError(NOT_FOUND, 'User: user not found');
 

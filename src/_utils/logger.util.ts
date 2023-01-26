@@ -1,14 +1,13 @@
 import winstonDaily from 'winston-daily-rotate-file';
 import { createLogger, format, transports } from 'winston';
 import { existsSync, mkdirSync } from 'fs';
-import { join } from 'path';
 import { log } from '@config/config';
 
 /**
  * Create a directory for the logs if it doesn't already exist
  * @constant {string} logDir - the path to the logs directory
  */
-const logDir: string = join(__dirname, log.dir);
+const logDir: string = log.dir;
 if (!existsSync(logDir)) {
   mkdirSync(logDir);
 }

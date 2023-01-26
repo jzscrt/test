@@ -10,7 +10,7 @@
     "build:tsc": "npx tsc && npx tsc-alias",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "lint:fix": "npm run lint -- --fix",
-    "test": "npx jest --forceExit",
+    "test": "cross-env NODE_ENV=development jest --watch --config jest.config.ts",
     "cdk:synth": "npx aws-cdk synth --app 'npx ts-node bin/cdk.ts'",
     "cdk:deploy": "npx aws-cdk deploy --app 'npx ts-node bin/cdk.ts'",
     "cdk:cleanup": "npx aws-cdk destroy --app 'npx ts-node bin/cdk.ts'",
@@ -35,8 +35,7 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.8.4",
     "passport": "^0.6.0",
-    "passport-jwt": "^4.0.1",
-    "tsconfig-paths-jest": "^0.0.1"
+    "passport-jwt": "^4.0.1"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.57",
@@ -69,6 +68,7 @@
     "ts-node": "^10.9.1",
     "tsc-alias": "^1.7.0",
     "tsconfig-paths": "^4.1.0",
+    "tsconfig-paths-jest": "^0.0.1",
     "tslib": "^2.4.0",
     "typescript": "^4.8.3",
     "winston": "^3.8.2",

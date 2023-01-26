@@ -11,10 +11,6 @@ import { jwtStrategy } from '@config/passport';
 import { logger } from '@utils/logger.util';
 import { Route } from '@interfaces/routes.interface';
 
-console.log('123');
-console.log(process.env);
-console.log(typeof process.env);
-
 class App {
   public app: express.Application;
   public port: string | number;
@@ -45,7 +41,6 @@ class App {
       set('debug', true);
     }
     const dbConnection = db[dbConfig.provider];
-    console.log(dbConnection);
     connect(dbConnection.url, err => {
       if (err) {
         logger.error('Error connecting to DB!');

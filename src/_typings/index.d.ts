@@ -1,2 +1,2 @@
-declare module '@meanie/mongoose-to-json';
 declare module 'tsconfig-paths-jest';
+declare module '@meanie/mongoose-to-json';
