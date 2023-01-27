@@ -17,7 +17,7 @@ describe('Testing Users...', () => {
       const userRoute = new UserRoute();
       const app = new App([userRoute]);
 
-      return request(app).get(`/v1/${userRoute.path}`).expect(201, { data: allUsers, message: 'allUsers' });
+      return request(app.app).get(`/v1/${userRoute.path}`).expect(201, { data: allUsers, message: 'allUsers' });
     });
   });
 
@@ -35,7 +35,7 @@ describe('Testing Users...', () => {
         role: ['user'],
       };
 
-      return request(app).post(`/v1/${userRoute.path}`).send(payloadBody).expect(201, {
+      return request(app.app).post(`/v1/${userRoute.path}`).send(payloadBody).expect(201, {
         data: lastInsertedUser,
         message: 'createdUser',
       });
@@ -52,11 +52,14 @@ describe('Testing Users...', () => {
         role: ['user'],
       };
 
-      return request(app)
+      return request(app.app)
         .post(`/v1/${userRoute.path}`)
         .send(payloadBody)
         .expect(400, {
-          message: `USER: email ${payloadBody.email} already exists`,
+          response: {
+            code: 400,
+            message: `USER: email ${payloadBody.email} already exists`,
+          },
         });
     });
 
@@ -71,9 +74,15 @@ describe('Testing Users...', () => {
         role: ['user'],
       };
 
-      return request(app).post(`/v1/${userRoute.path}`).send(payloadBody).expect(400, {
-        message: 'User: invalid userData',
-      });
+      return request(app.app)
+        .post(`/v1/${userRoute.path}`)
+        .send(payloadBody)
+        .expect(400, {
+          response: {
+            code: 500,
+            message: 'User validation failed: name: Path `name` is required.',
+          },
+        });
     });
   });
 
@@ -89,7 +98,7 @@ describe('Testing Users...', () => {
         role: ['user'],
       };
 
-      return request(app).post(`/v1/${userRoute.path}/63ca44e502192ccf493403f7`).send(payloadBody).expect(201, {
+      return request(app.app).patch(`/v1/${userRoute.path}/63ca44e502192ccf493403f7`).send(payloadBody).expect(201, {
         data: updatedUser,
         message: 'updatedUser',
       });
@@ -104,9 +113,15 @@ describe('Testing Users...', () => {
         role: ['user'],
       };
 
-      return request(app).post(`/v1/${userRoute.path}/`).send(payloadBody).expect(400, {
-        message: 'User: invalid userId',
-      });
+      return request(app.app)
+        .patch(`/v1/${userRoute.path}/`)
+        .send(payloadBody)
+        .expect(400, {
+          response: {
+            code: 400,
+            message: 'User: invalid userId',
+          },
+        });
     });
 
     it('response statusCode 400 / updatedUser Fail - User: invalid userData', async () => {
@@ -118,9 +133,15 @@ describe('Testing Users...', () => {
         role: ['user'],
       };
 
-      return request(app).post(`/v1/${userRoute.path}/63ca44e502192ccf493403f7`).send(payloadBody).expect(400, {
-        message: 'User: invalid userData',
-      });
+      return request(app.app)
+        .patch(`/v1/${userRoute.path}/63ca44e502192ccf493403f7`)
+        .send(payloadBody)
+        .expect(400, {
+          response: {
+            code: 400,
+            message: 'User: invalid userData',
+          },
+        });
     });
 
     it('response statusCode 409 / updatedUser Fail - User: user not found', async () => {
@@ -132,34 +153,54 @@ describe('Testing Users...', () => {
         role: ['user'],
       };
 
-      return request(app).post(`/v1/${userRoute.path}/2351236512346`).send(payloadBody).expect(409, {
-        message: 'User: user not found',
-      });
+      return request(app.app)
+        .post(`/v1/${userRoute.path}/2351236512346`)
+        .send(payloadBody)
+        .expect(409, {
+          response: {
+            code: 400,
+            message: 'User: user not found',
+          },
+        });
     });
   });
 
-  describe('[DELETE] /v1/users - Get all users', () => {
+  describe('[DELETE] /v1/users - Delete a user', () => {
     it('response statusCode 201 / deletedUser Success', async () => {
       const users = userModel;
       const deletedUser: User[] = await users.find({ _id: '63ca44e502192ccf493403f7' });
       const userRoute = new UserRoute();
       const app = new App([userRoute]);
 
-      return request(app).get(`/v1/${userRoute.path}/63ca44e502192ccf493403f7`).expect(201, { data: deletedUser, message: 'allUsers' });
+      return request(app.app).delete(`/v1/${userRoute.path}/63ca44e502192ccf493403f7`).expect(201, { data: deletedUser, message: 'deletedUser' });
     });
 
     it('response statusCode 400 / deletedUser Fail - User: invalid userId', async () => {
       const userRoute = new UserRoute();
       const app = new App([userRoute]);
 
-      return request(app).get(`/v1/${userRoute.path}`).expect(400, { message: 'User: invalid userId' });
+      return request(app.app)
+        .delete(`/v1/${userRoute.path}`)
+        .expect(400, {
+          response: {
+            code: 400,
+            message: 'User: invalid userId',
+          },
+        });
     });
 
     it('response statusCode 409 / deletedUser Fail - User: User: user not found', async () => {
       const userRoute = new UserRoute();
       const app = new App([userRoute]);
 
-      return request(app).get(`/v1/${userRoute.path}/12312312321`).expect(409, { message: 'User: User: user not found' });
+      return request(app.app)
+        .delete(`/v1/${userRoute.path}/12312312321`)
+        .expect(409, {
+          response: {
+            code: 400,
+            message: 'User: User: user not found',
+          },
+        });
     });
   });
 });

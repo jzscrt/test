@@ -3,7 +3,8 @@ import request from 'supertest';
 import tokenModel from '../models/tokens.model';
 import userModel from '../models/users.model';
 import authRoute from '../routes/auth.route';
-import { LoginAuthDto } from '../dtos/auth.dto';
+import { LoginAuthDto, LogoutAuthDto } from '../dtos/auth.dto';
+import { Token } from 'aws-cdk-lib';
 
 afterAll(async () => {
   await new Promise<void>(resolve => setTimeout(() => resolve(), 500));
@@ -25,7 +26,7 @@ describe('Testing Auth...', () => {
         password: 'password',
       };
 
-      return request(app)
+      return request(app.app)
         .post(`/v1/${authRoutes.path}/signup`)
         .send(payloadBody)
         .expect(201, { data: { user: lastInsertedUser, tokenCreated }, message: 'created' });
@@ -40,9 +41,15 @@ describe('Testing Auth...', () => {
         password: 'password',
       };
 
-      return request(app).post(`/v1/${authRoutes.path}/signup`).send(payloadBody).expect(400, {
-        message: 'User: invalid userData',
-      });
+      return request(app.app)
+        .post(`/v1/${authRoutes.path}/signup`)
+        .send(payloadBody)
+        .expect(400, {
+          response: {
+            code: 400,
+            message: 'User: invalid userData',
+          },
+        });
     });
 
     it('response statusCode 400 / created Fail - Duplicate email', async () => {
@@ -54,11 +61,14 @@ describe('Testing Auth...', () => {
         password: 'password',
       };
 
-      return request(app)
+      return request(app.app)
         .post(`/v1/${authRoutes.path}/signup`)
         .send(payloadBody)
         .expect(400, {
-          message: `USER: email ${payloadBody.email} already exists`,
+          response: {
+            code: 400,
+            message: `USER: email ${payloadBody.email} already exists`,
+          },
         });
     });
   });
@@ -77,7 +87,7 @@ describe('Testing Auth...', () => {
         password: 'password',
       };
 
-      return request(app)
+      return request(app.app)
         .post(`/v1/${authRoutes.path}/login`)
         .send(payloadBody)
         .expect(201, { data: { user: loginUser, tokenCreated }, message: 'logged in' });
@@ -91,9 +101,15 @@ describe('Testing Auth...', () => {
         password: 'password',
       };
 
-      return request(app).post(`/v1/${authRoutes.path}/login`).send(payloadBody).expect(400, {
-        message: 'AUTH: invalid userData',
-      });
+      return request(app.app)
+        .post(`/v1/${authRoutes.path}/login`)
+        .send(payloadBody)
+        .expect(400, {
+          response: {
+            code: 400,
+            message: 'AUTH: invalid userData',
+          },
+        });
     });
 
     it('response statusCode 404 / Login Fail - User not found', async () => {
@@ -104,9 +120,15 @@ describe('Testing Auth...', () => {
         password: 'password',
       };
 
-      return request(app).post(`/v1/${authRoutes.path}/login`).send(payloadBody).expect(404, {
-        message: 'AUTH: user not found',
-      });
+      return request(app.app)
+        .post(`/v1/${authRoutes.path}/login`)
+        .send(payloadBody)
+        .expect(404, {
+          response: {
+            code: 404,
+            message: 'AUTH: user not found',
+          },
+        });
     });
 
     it('response statusCode 400 / Login Fail - password did not match', async () => {
@@ -117,14 +139,20 @@ describe('Testing Auth...', () => {
         password: 'notitspassword',
       };
 
-      return request(app).post(`/v1/${authRoutes.path}/login`).send(payloadBody).expect(400, {
-        message: 'AUTH: password did not match',
-      });
+      return request(app.app)
+        .post(`/v1/${authRoutes.path}/login`)
+        .send(payloadBody)
+        .expect(400, {
+          response: {
+            code: 400,
+            message: 'AUTH: password did not match',
+          },
+        });
     });
   });
 
   describe('[POST] /v1/logout - Logout a user', () => {
-    it('response statusCode 200 / logged in Success', async () => {
+    it('response statusCode 200 / logged out Success', async () => {
       const users = userModel;
       const loginUser = await users.find({ email: 'newaccount@regalcredit.com' });
       const tokens = tokenModel;
@@ -132,12 +160,12 @@ describe('Testing Auth...', () => {
 
       const authRoutes = new authRoute();
       const app = new App([authRoutes]);
-      const payloadBody: LoginAuthDto = {
-        email: 'newaccount@regalcredit.com',
-        password: 'password',
+      const payloadBody: LogoutAuthDto = {
+        refreshToken: 'newaccount@regalcredit.com',
+        accessToken: 'password',
       };
 
-      return request(app)
+      return request(app.app)
         .post(`/v1/${authRoutes.path}/login`)
         .send(payloadBody)
         .expect(201, { data: { user: loginUser, tokenCreated }, message: 'logged out' });
@@ -146,12 +174,12 @@ describe('Testing Auth...', () => {
     it('response statusCode 400 / Login Fail - Invalid user data', async () => {
       const authRoutes = new authRoute();
       const app = new App([authRoutes]);
-      const payloadBody: LoginAuthDto = {
-        email: '',
-        password: 'password',
+      const payloadBody: LogoutAuthDto = {
+        refreshToken: 'newaccount@regalcredit.com',
+        accessToken: 'password',
       };
 
-      return request(app).post(`/v1/${authRoutes.path}/login`).send(payloadBody).expect(400, {
+      return request(app.app).post(`/v1/${authRoutes.path}/login`).send(payloadBody).expect(400, {
         message: 'AUTH: invalid userData',
       });
     });
@@ -164,7 +192,7 @@ describe('Testing Auth...', () => {
         password: 'password',
       };
 
-      return request(app).post(`/v1/${authRoutes.path}/login`).send(payloadBody).expect(404, {
+      return request(app.app).post(`/v1/${authRoutes.path}/login`).send(payloadBody).expect(404, {
         message: 'AUTH: user not found',
       });
     });
@@ -177,7 +205,7 @@ describe('Testing Auth...', () => {
         password: 'notitspassword',
       };
 
-      return request(app).post(`/v1/${authRoutes.path}/login`).send(payloadBody).expect(400, {
+      return request(app.app).post(`/v1/${authRoutes.path}/login`).send(payloadBody).expect(400, {
         message: 'AUTH: password did not match',
       });
     });
