@@ -1,5 +1,5 @@
 import passport from 'passport';
-import TokenService from '@services/tokens.service';
+import { TokenService } from '@services/tokens.service';
 import { ApiError, checkRights, mapRoles, mergeRoleRights } from '@utils';
 import { FORBIDDEN, UNAUTHORIZED } from 'http-status';
 import { isEmpty } from 'class-validator';

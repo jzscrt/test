@@ -1,3 +1,3 @@
-export { default as AuthService } from './auth.service';
-export { default as TokenService } from './tokens.service';
-export { default as UserService } from './users.service';
+export { AuthService } from './auth.service';
+export { TokenService } from './tokens.service';
+export { UserService } from './users.service';

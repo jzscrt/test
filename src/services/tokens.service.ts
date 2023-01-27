@@ -1,6 +1,6 @@
 import dayjs, { Dayjs } from 'dayjs';
 import tokenModel from '@models/tokens.model';
-import UserService from '@services/users.service';
+import { UserService } from '@services/users.service';
 import { ApiError } from '@utils';
 import { BAD_REQUEST } from 'http-status';
 import { CreateTokenDto, PackTokenDto } from '@dtos/tokens.dto';
@@ -207,3 +207,4 @@ class TokenService {
 }
 
 export default TokenService;
+export { TokenService };
