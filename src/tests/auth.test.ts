@@ -4,7 +4,6 @@ import tokenModel from '../models/tokens.model';
 import userModel from '../models/users.model';
 import authRoute from '../routes/auth.route';
 import { LoginAuthDto, LogoutAuthDto } from '../dtos/auth.dto';
-import { Token } from 'aws-cdk-lib';
 
 afterAll(async () => {
   await new Promise<void>(resolve => setTimeout(() => resolve(), 500));
