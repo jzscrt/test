@@ -1,8 +1,8 @@
-import { IsArray, IsEmail, IsObject, IsOptional, IsString, IsDate } from 'class-validator';
+import { IsArray, IsEmail, IsObject, IsOptional, IsString, IsISO8601, IsPhoneNumber } from 'class-validator';
 import { ClientName, ClientAddress, ClientDummyAccount } from '@interfaces/clients.interface';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-export class CreateClientDto {
+export class CreateUpdateClientDto {
   @IsString()
   public fullName: string;
 
@@ -11,19 +11,26 @@ export class CreateClientDto {
 
   @IsArray()
   @IsOptional()
-  public aliasNames: ClientName[];
+  public aliasName: ClientName[];
 
   @IsEmail()
   public email: string;
 
+  @IsArray()
+  @IsOptional()
+  altEmail: string[];
+
   @IsObject()
   public address: ClientAddress;
 
-  @IsObject()
+  @IsArray()
   @IsOptional()
   public altAddress: ClientAddress[];
 
-  @IsObject()
+  @IsPhoneNumber('US')
+  public phone: string;
+
+  @IsArray()
   @IsOptional()
   public dummyAccount: ClientDummyAccount[];
 
@@ -40,11 +47,11 @@ export class CreateClientDto {
   public sfId: string;
 
   @IsString()
-  public staus: string;
+  public status: string;
 
-  @IsDate()
-  public dataBirth: string;
+  @IsISO8601()
+  public dateBirth: string;
 
-  @IsDate()
+  @IsISO8601()
   public dateEnrollment: string;
 }

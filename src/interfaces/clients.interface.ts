@@ -1,9 +1,9 @@
 import { ClientStatus } from '@enums';
 
 export interface ClientName {
-  first: string;
-  middle?: string;
-  last: string;
+  firstName: string;
+  middleName?: string;
+  lastName: string;
 }
 
 export interface ClientAddress {
@@ -23,15 +23,17 @@ export interface Client {
   id: string;
   fullName: string;
   name: ClientName;
-  aliasNames?: [ClientName];
+  aliasName?: [ClientName];
   email: string;
+  altEmail?: [string];
   address: ClientAddress;
   altAddress?: [ClientAddress];
+  phone: string;
   dummyAccount?: [ClientDummyAccount];
   profession?: string;
   workload?: string;
   sfId?: string;
-  staus: ClientStatus;
-  dataBirth: Date;
+  status: ClientStatus;
+  dateBirth: Date;
   dateEnrollment: Date;
 }

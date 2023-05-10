@@ -1,5 +1,5 @@
 import ClientController from '@controllers/clients.controller';
-import { CreateClientDto } from '@dtos';
+import { CreateUpdateClientDto } from '@dtos';
 import { Route } from '@interfaces/routes.interface';
 import { Router } from 'express';
 import { validationMiddleware as validate } from '@middlewares/validation.middleware';
@@ -15,11 +15,11 @@ class ClientRoute implements Route {
   }
 
   private initializeRoutes() {
-    // this.router.get(`${this.path}/:clientId`, auth(['client-o']), this.clientController.getClients);
-    // this.router.get(this.path, auth(['client-r']), this.clientController.getClients);
-    this.router.post(this.path, validate(CreateClientDto, 'body'), this.clientController.createClient);
-    // this.router.patch(this.path, auth(['client-w']), this.clientController.updateClient);
-    // this.router.delete(`${this.path}/:clientId`, auth(['client-x']), this.clientController.deleteClient);
+    this.router.get(`${this.path}/:clientId`, this.clientController.getClients);
+    this.router.get(this.path, this.clientController.getClients);
+    this.router.post(this.path, validate(CreateUpdateClientDto, 'body'), this.clientController.createClient);
+    this.router.patch(`${this.path}/:clientId`, validate(CreateUpdateClientDto, 'body', true), this.clientController.updateClient);
+    this.router.delete(`${this.path}/:clientId`, this.clientController.deleteClient);
   }
 }
 

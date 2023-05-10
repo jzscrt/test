@@ -63,18 +63,19 @@ const clientSchema: Schema = new Schema(
       type: nameSchema,
       required: true,
     },
-    aliasNames: {
+    aliasName: {
       type: [nameSchema],
     },
     email: {
       type: String,
       required: true,
     },
-    altEmails: {
+    altEmail: {
       type: [String],
     },
     address: {
       type: addressSchema,
+      required: true,
     },
     altAddress: {
       type: [addressSchema],
@@ -95,7 +96,7 @@ const clientSchema: Schema = new Schema(
     sfId: {
       type: String,
     },
-    staus: {
+    status: {
       type: String,
       enum: ClientStatus,
       default: ClientStatus.NOT_SET,
