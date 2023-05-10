@@ -3,29 +3,61 @@
 ---
 
 ## Project Installation
+
+&ensp;
+
 1. Clone the project repository.
-```sh
-$ git clone <repository_link_here>
-$ cd cybersweep-server-ts
-```
-2. Duplicate `.env.bak` and rename it to `.env` .
-```sh
-$ cp .bak.env .env
-```
+    ```sh
+    $ git clone <repository_link_here>
+    $ cd cybersweep-server-ts
+    ```
 
-3. Install the project dependencies.
-```sh
-$ npm install
-```
-4. Run the server
-```sh
-$ npm run dev
+&ensp;
 
-# Use http://localhost:3000/v1/ to access the API.
-# Navigate to http://localhost:3000/docs for API documenation, built with Swagger.
-```
+2. Duplicate `.env.bak` and rename it to `.env.<stage>.<host>` .
+    ```sh
+    $ cp .env.bak .env.development.local
+    ```
 
-5. Run unit test
-```sh
-$ npm run test
-```
+&ensp;
+
+3. Create your mongodb database as defined in your `.env.<stage>.<host>`.
+    ```sh
+    # Inside Mongosh
+    > use <DB_NAME>
+    > db.createUser({
+        user: "<DB_UN>",
+        pwd: "<DB_PW>",
+        roles: [
+            {
+                role: "readWrite",
+                db: "<DB_NAME>"
+            }]
+    })
+    ```
+
+
+
+
+&ensp;
+
+4. Install the project dependencies.
+    ```sh
+    $ npm install
+    ```
+
+&ensp;
+
+5. Run the server
+    ```sh
+    $ npm run dev
+
+    # Use http://localhost:3000/v1/ to access the API.
+    # Navigate to http://localhost:3000/docs for API documenation, built with Swagger.
+    ```
+&ensp;
+
+- Run unit test
+    ```sh
+    $ npm run test
+    ```
