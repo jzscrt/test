@@ -1,5 +1,6 @@
 import App from './app';
-import AnimalRoute from './routes/animals.route';
+import AuthRoute from './routes/auth.route';
+import UserRoute from './routes/users.route';
 
-const app = new App([new AnimalRoute()]);
+const app = new App([new UserRoute(), new AuthRoute()]);
 app.listen();
