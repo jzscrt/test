@@ -1,4 +1,4 @@
-import userService from '@services/users.service';
+import { UserService } from '@services/users.service';
 import { catchAsync } from '@utils/catchAsync.util';
 import { CREATED, OK } from 'http-status';
 import { CreateUserDto } from '@dtos/users.dto';
@@ -7,7 +7,7 @@ import { User } from '@interfaces/users.interface';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 class UserController {
-  public userService = new userService();
+  public userService = new UserService();
 
   public getUsers = catchAsync(async (req: Request, res: Response, _next: NextFunction): Promise<void> => {
     const { userId } = req.params;
