@@ -3,7 +3,6 @@ import { CreateUpdateClientDto } from '@dtos';
 import { Route } from '@interfaces/routes.interface';
 import { Router } from 'express';
 import { validationMiddleware as validate } from '@middlewares/validation.middleware';
-import { authenticationMiddleware as auth } from '@middlewares/authentication.middleware';
 
 class ClientRoute implements Route {
   public path = '/clients';

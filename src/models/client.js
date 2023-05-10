@@ -22,7 +22,7 @@ const nameSchema = mongoose.Schema(
   },
   {
     _id: false,
-  }
+  },
 );
 
 const aliasNameSchema = mongoose.Schema(
@@ -42,7 +42,7 @@ const aliasNameSchema = mongoose.Schema(
   },
   {
     _id: false,
-  }
+  },
 );
 
 const stateSchema = mongoose.Schema(
@@ -58,7 +58,7 @@ const stateSchema = mongoose.Schema(
   },
   {
     _id: false,
-  }
+  },
 );
 
 const addressSchema = mongoose.Schema(
@@ -86,7 +86,7 @@ const addressSchema = mongoose.Schema(
   },
   {
     _id: false,
-  }
+  },
 );
 
 const dummySchema = mongoose.Schema(
@@ -115,7 +115,7 @@ const dummySchema = mongoose.Schema(
   },
   {
     _id: false,
-  }
+  },
 );
 
 const clientSchema = mongoose.Schema(
@@ -204,7 +204,7 @@ const clientSchema = mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 clientSchema.plugin(toJSON);

@@ -1,10 +1,9 @@
 import clientModel from '@models/clients.model';
 import { ApiError } from '@utils/apierror.util';
 import { BAD_REQUEST, NOT_FOUND } from 'http-status';
-import { CreateClientDto } from '@dtos/clients.dto';
+import { CreateUpdateClientDto } from '@dtos/clients.dto';
 import { isEmpty, isNotEmptyObject } from 'class-validator';
 import { Client } from '@interfaces/clients.interface';
-import { KeyObject } from 'crypto';
 
 class ClientService {
   public clients = clientModel;
@@ -36,10 +35,10 @@ class ClientService {
   /**
    * Creates a new Client object in the database.
    *
-   * @param {CreateClientDto} clientData - The data for the new Client object.
+   * @param {CreateUpdateClientDto} clientData - The data for the new Client object.
    * @returns {Promise<Client>} - A promise that resolves to the new Client object.
    */
-  public async createClient(clientData: CreateClientDto): Promise<Client> {
+  public async createClient(clientData: CreateUpdateClientDto): Promise<Client> {
     if (!isNotEmptyObject(clientData)) throw new ApiError(BAD_REQUEST, 'USER: invalid clientData');
 
     const createClient = await this.clients.create(clientData);
@@ -51,10 +50,10 @@ class ClientService {
    * Updates a Client object by its id.
    *
    * @param {string} clientId - The id of the Client object to update.
-   * @param {CreateClientDto} clientData - The updated data for the Client object.
+   * @param {CreateUpdateClientDto} clientData - The updated data for the Client object.
    * @returns {Promise<Client>} - A promise that resolves to the updated Client object.
    */
-  public async updateClient(clientId: string, clientData: CreateClientDto): Promise<Client> {
+  public async updateClient(clientId: string, clientData: CreateUpdateClientDto): Promise<Client> {
     if (isEmpty(clientId)) throw new ApiError(BAD_REQUEST, 'Client: invalid clientId');
     if (isEmpty(clientData)) throw new ApiError(BAD_REQUEST, 'Client: invalid clientData');
 
