@@ -8,7 +8,7 @@
 $ git clone <repository_link_here>
 $ cd cybersweep-server-ts
 ```
-2. Duplicate `.bak.env` and rename it to `.env` .
+2. Duplicate `.env.bak` and rename it to `.env` .
 ```sh
 $ cp .bak.env .env
 ```
