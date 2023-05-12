@@ -29,8 +29,7 @@ const envSchema = Joi.object()
     LOG_DIR: Joi.string().default(join(__dirname, '../../logs')).description('log folder location'),
 
     CDK_DEFAULT_REGION: Joi.string().default('us-east-1').description('AWS Account Region'),
-    CDK_DEFAULT_ACCOUNT: Joi.string().default('865942198740').description('AWS Account Profile'),
-    // CDK_DEFAULT_ACCOUNT: Joi.string().default('default').description('AWS Account Profile'),
+    CDK_DEFAULT_ACCOUNT: Joi.string().default('default').description('AWS Account Profile'),
 
     JWT_SECRET: Joi.string().required().description('JWT secret key'),
     // 10080 minutes - 7 days - 1 week
