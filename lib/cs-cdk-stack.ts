@@ -1,25 +1,19 @@
-import { App, Duration, Stack, StackProps } from 'aws-cdk-lib';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { App, Stack, StackProps } from 'aws-cdk-lib';
 import { control } from '../src/_config/config';
-import { join } from 'path';
 import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
-import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
-import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { CDKContext } from '../src/dtos/cdk.dto';
+import { LambdaStack } from '../src/_cdk/lambdaStack.cdk';
 
-export class CdkStarterStack extends Stack {
-  constructor(scope: App, id: string, props?: StackProps) {
+export class CyberSweepCdkStack extends Stack {
+  constructor(scope: App, id: string, props: StackProps, context: CDKContext) {
     super(scope, id, props);
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const usersLambdaCS = new NodejsFunction(this, 'usersCtrl-lambda-cs', {
-      memorySize: 1024,
-      timeout: Duration.minutes(3),
-      runtime: Runtime.NODEJS_16_X,
-      handler: 'main',
-      entry: join(__dirname, '../src/_lambdas/users.lambda.ts'),
-      projectRoot: join(__dirname, '../'),
-    });
+    const CSLambdaStack = LambdaStack(this, context);
+    const csLambdaUser = CSLambdaStack.csLambdaUser;
+    const csLambdaClient = CSLambdaStack.csLambdaClient;
 
-    const api = new RestApi(this, 'apigateway-cb', {
+    const API = new RestApi(this, 'Cybersweep-API', {
       description: 'CyberSweep Api Gateway built with CDK',
       deployOptions: {
         stageName: 'dev',
@@ -32,10 +26,16 @@ export class CdkStarterStack extends Stack {
       },
     });
 
-    const rootAPI = api.root.addResource('api').addResource(control.routesVer || 'v1');
-    const usersAPI = rootAPI.addResource('users');
+    const rootAPIResource = API.root.addResource('api').addResource(control.routesVer || 'v1');
+
+    const userAPI = rootAPIResource.addResource('user');
     ['GET', 'POST', 'PATCH', 'DELETE'].forEach(method => {
-      usersAPI.addMethod(method, new LambdaIntegration(usersLambdaCS));
+      userAPI.addMethod(method, new LambdaIntegration(csLambdaUser));
+    });
+
+    const clientAPI = rootAPIResource.addResource('client');
+    ['GET', 'POST', 'PATCH', 'DELETE'].forEach(method => {
+      clientAPI.addMethod(method, new LambdaIntegration(csLambdaClient));
     });
   }
 }
