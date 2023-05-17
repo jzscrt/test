@@ -1,19 +1,20 @@
 import request from 'supertest';
-import express, { NextFunction } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
+import ClientService from '../services/clients.service';
 import ClientController from '../controllers/clients.controller';
-import { ClientService } from '../services/clients.service';
 import { CreateUpdateClientDto } from '../dtos/clients.dto';
 import { Client } from '../interfaces/clients.interface';
 import { BAD_REQUEST, OK } from 'http-status';
 import { ApiError } from '../_utils/apierror.util';
+import { ClientStatus } from '../enums';
 
 describe('ClientController', () => {
-  let clientService: ClientService;
   let clientController: ClientController;
+  let clientService: ClientService;
 
   beforeEach(() => {
-    clientService = new ClientService();
     clientController = new ClientController();
+    clientService = new ClientService();
   });
 
   afterEach(() => {
@@ -93,7 +94,7 @@ describe('ClientController', () => {
         },
         phone: '1234567890',
         dateBirth: new Date('1990-01-01'),
-        status: 'NOT_SET',
+        status: ClientStatus.NOT_SET,
         dateEnrollment: new Date('2023-01-01'),
         aliasName: [
           {
@@ -250,7 +251,7 @@ describe('ClientController', () => {
         },
         phone: '1234567890',
         dateBirth: new Date('1990-01-01'),
-        status: 'Not Set',
+        status: ClientStatus.NOT_SET,
         dateEnrollment: new Date('2023-05-15T00:00:00.000Z'),
       };
 
@@ -332,7 +333,7 @@ describe('ClientController', () => {
         json: jest.fn(),
       };
 
-      jest.spyOn(ClientService.prototype, 'getClient').mockResolvedValue(mockClient);
+      jest.spyOn(clientService, 'findClientById').mockResolvedValue(mockClient as Client);
 
       const next: NextFunction = jest.fn();
 
@@ -364,7 +365,26 @@ describe('ClientController', () => {
         json: jest.fn(),
       };
 
-      jest.spyOn(ClientService.prototype, 'deleteClient').mockResolvedValue();
+      const mockClient: Partial<Client> = {
+        id: 'someClientId',
+        fullName: 'John Doe',
+        name: {
+          firstName: 'John',
+          lastName: 'Doe',
+        },
+        email: 'johndoe@example.com',
+        address: {
+          number: '123',
+          street: 'Main St',
+          city: 'Townsville',
+          state: 'TX',
+          zip: '12345',
+        },
+        phone: '123-456-7890',
+        dateBirth: new Date('1990-01-01'),
+      };
+
+      jest.spyOn(clientService, 'deleteClient').mockResolvedValue(mockClient as Client);
 
       const next: NextFunction = jest.fn();
 

@@ -1,4 +1,4 @@
-import { ClientService } from '@services/clients.service';
+import ClientService from '@services/clients.service';
 import { catchAsync } from '@utils/catchAsync.util';
 import { CREATED, OK } from 'http-status';
 import { CreateUpdateClientDto } from '@dtos/clients.dto';

@@ -7,7 +7,6 @@ import { Client } from '@interfaces/clients.interface';
 
 class ClientService {
   public clients = clientModel;
-
   /**
    * Retrieves all Client objects from the database.
    *
@@ -98,4 +97,3 @@ class ClientService {
 }
 
 export default ClientService;
-export { ClientService };
